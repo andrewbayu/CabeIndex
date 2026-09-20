@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CabeIndex — Barometer Tensi Politik & Kepercayaan Publik Indonesia</title>
+  <meta name="description" content="Kondisi terkini sentimen politik dan public trust Indonesia yang dihitung otomatis dari arus berita nasional, divisualisasikan dalam skala kepedasan Scoville.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌶️</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Ambient Particle Canvas for Heat & Embers -->
+  <canvas id="particle-canvas"></canvas>
+
+  <div class="app-wrapper">
+    
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+      <a href="index.html" class="brand">
+        <span class="brand-icon">🌶️</span>
+        <span class="brand-title">Cabe<span>Index</span></span>
+      </a>
+      <div class="nav-actions">
+        <a href="methodology.html" class="btn-secondary">Metodologi</a>
+        <button id="open-share-btn" class="btn-primary">📸 Bagikan Heat Card</button>
+      </div>
+    </nav>
+
+    <!-- Hero Section with Spiciness Odometer -->
+    <header class="hero">
+      <div class="live-badge">
+        <span class="pulse-dot"></span>
+        <span>Live Barometer Nasional • Otomatis</span>
+      </div>
+
+      <h1 class="hero-heading">Seberapa Pedas Kondisi Negara Hari Ini?</h1>
+      <p class="hero-subtitle" id="hero-desc">Memantau tensi politik, dinamika ekonomi rakyat, dan kepercayaan publik secara objektif tanpa login.</p>
+
+      <!-- The Odometer Tachometer Box -->
+      <div class="odometer-container">
+        
+        <div class="gauge-wrapper">
+          <!-- Dynamic SVG dial rendered by app.js -->
+          <div id="gauge-container" style="width: 100%; height: 100%;"></div>
+
+          <!-- Interactive Mascot Chili at Center Base -->
+          <div class="mascot-chili">
+            <span id="mascot-avatar" class="mascot-avatar">🌶️</span>
+          </div>
+        </div>
+
+        <!-- Gauge Readout Numbers & Tier Pill -->
+        <div class="gauge-stats">
+          <div class="score-display">
+            <span id="score-number" class="score-number">--.-</span>
+            <span class="score-max">/ 100</span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-top: 0.25rem;">
+            <span id="tier-pill" class="tier-pill">Memuat...</span>
+            <span id="tier-chili-name" class="tier-chili-name">--</span>
+          </div>
+
+          <div id="delta-badge" class="delta-badge neutral">
+            <span>― Menghitung perubahan...</span>
+          </div>
+        </div>
+
+        <!-- Odometer Footer Stats -->
+        <div class="odometer-footer">
+          <span><strong id="articles-count">50</strong> berita dianalisis</span>
+          <span id="last-updated">Diperbarui beberapa saat lalu</span>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Sub-Indices (The Three Pillars) -->
+    <section class="section">
+      <h2 class="section-title">⚖️ Tiga Pilar Indeks Kepedasan</h2>
+      <div id="subindices-grid" class="subindices-grid">
+        <!-- Injected dynamically by app.js -->
+      </div>
+    </section>
+
+    <!-- Historical Trendline Chart -->
+    <section class="trend-section">
+      <div class="trend-header">
+        <div>
+          <h2 class="section-title" style="margin-bottom: 0.25rem;">📈 Grafik Kepedasan Nasional</h2>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Tren sentimen harian dan dinamika isu penting</p>
+        </div>
+        <div class="trend-filters">
+          <button class="filter-btn active" data-days="7">7 Hari</button>
+          <button class="filter-btn" data-days="14">14 Hari</button>
+          <button class="filter-btn" data-days="30">30 Hari</button>
+        </div>
+      </div>
+      <div id="trend-chart-container" class="trend-chart-container">
+        <!-- Injected dynamically by app.js -->
+      </div>
+    </section>
+
+    <!-- Top News Drivers (Cabai Rawit Hari Ini) -->
+    <section class="drivers-section">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem;">
+        <h2 class="section-title" style="margin-bottom: 0;">🔥 Cabai Rawit Hari Ini</h2>
+        <span style="font-size: 0.8rem; color: var(--text-muted);">Topik terpanas pendorong skor index</span>
+      </div>
+      <div id="drivers-grid" class="drivers-grid">
+        <!-- Injected dynamically by app.js -->
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div>
+        <strong>CabeIndex.id</strong> — Proyek independen agregasi sentimen & transparansi data publik.
+      </div>
+      <div class="footer-links">
+        <a href="methodology.html">Metodologi & Formula</a>
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer">Sumber Terbuka</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Share Card Modal -->
+  <div id="share-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Bagikan Kondisi Hari Ini</h3>
+        <button id="close-modal-btn" class="close-btn">&times;</button>
+      </div>
+      
+      <div class="card-preview-area">
+        <canvas id="share-canvas"></canvas>
+      </div>
+
+      <div class="modal-actions">
+        <button id="download-card-btn" class="btn-primary" style="flex: 1; justify-content: center;">⬇️ Unduh Gambar (HD)</button>
+        <button id="copy-link-btn" class="btn-secondary" style="flex: 1; justify-content: center;">📋 Salin Teks</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

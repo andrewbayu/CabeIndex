@@ -1,0 +1,159 @@
+{
+  "score": 50.7,
+  "tier": {
+    "min": 46,
+    "max": 70,
+    "id": "nampol",
+    "label": "Pedas Nampol",
+    "chiliName": "Cabe Rawit Merah",
+    "color": "#EF4444",
+    "badgeBg": "rgba(239, 68, 68, 0.15)",
+    "description": "Sorotan tajam terhadap institusi, tekanan ekonomi terasa, dan kritik netizen menguat.",
+    "mascot": "sweating"
+  },
+  "delta24h": 0,
+  "updatedAt": "2026-09-20T03:46:23.447Z",
+  "articlesAnalyzed": 50,
+  "subIndices": {
+    "institusi": {
+      "score": 51,
+      "label": "Hukum & Institusi",
+      "desc": "Integritas KPK, DPR, Kementerian, dan Kebijakan Regulasi",
+      "weight": "40%"
+    },
+    "ekonomi": {
+      "score": 50,
+      "label": "Dapur & Ekonomi",
+      "desc": "Harga Pangan, Inflasi, Pajak, dan Lapangan Pekerjaan",
+      "weight": "35%"
+    },
+    "sosial": {
+      "score": 51,
+      "label": "Tensi Sosial & Publik",
+      "desc": "Aksi Massa, Petisi Publik, dan Sentimen Percakapan Sipil",
+      "weight": "25%"
+    }
+  },
+  "topDrivers": [
+    {
+      "title": "RUU Perampasan Aset: Mengapa penting untuk berantas korupsi?",
+      "snippet": "Pemberantasan korupsi tidak hanya berkaitan dengan menghukum pelaku, tetapi juga mengupayakan agar aset yang berasal ...",
+      "url": "https://www.antaranews.com/berita/5741441/ruu-perampasan-aset-mengapa-penting-untuk-berantas-korupsi",
+      "source": "Antara News",
+      "category": "institusi",
+      "pubDate": "Tue, 15 Sep 2026 12:44:01 +0700",
+      "heatScore": 55,
+      "sentiment": "waspada",
+      "pillarScores": {
+        "institusi": 62,
+        "ekonomi": 50,
+        "sosial": 50
+      }
+    },
+    {
+      "title": "Baleg Serap Masukan Perubahan Status Jakarta hingga Pengurangan Anggota DPRD untuk Prolegnas 2027",
+      "snippet": "Baleg DPR RI menerima berbagai masukan untuk penyusunan Prolegnas Prioritas 2027, termasuk penyesuaian regulasi pasca perubahan status Jakarta dan wacana pengurangan jumlah anggota DPRD.",
+      "url": "https://nasional.tempo.co/read/2119560/baleg-serap-masukan-perubahan-status-jakarta-hingga-pengurangan-anggota-dprd-untuk-prolegnas-2027",
+      "source": "Tempo Nasional",
+      "category": "institusi",
+      "pubDate": "Mon, 14 Sep 2026 21:01:28 +0700",
+      "heatScore": 55,
+      "sentiment": "waspada",
+      "pillarScores": {
+        "institusi": 62,
+        "ekonomi": 50,
+        "sosial": 50
+      }
+    },
+    {
+      "title": "DPRD Kota Bogor Dorong Keberlanjutan Program Padat Karya, Bantu Ekonomi Masyarakat",
+      "snippet": "Program Padat Karya Kota Bogor melibatkan sekitar 1.700 warga untuk membantu pemeliharaan fasilitas publik sekaligus memberikan penghasilan tambahan bagi masyarakat.",
+      "url": "https://nasional.tempo.co/read/2119547/dprd-kota-bogor-dorong-keberlanjutan-program-padat-karya-bantu-ekonomi-masyarakat",
+      "source": "Tempo Nasional",
+      "category": "institusi",
+      "pubDate": "Mon, 14 Sep 2026 18:55:34 +0700",
+      "heatScore": 55,
+      "sentiment": "waspada",
+      "pillarScores": {
+        "institusi": 62,
+        "ekonomi": 50,
+        "sosial": 50
+      }
+    },
+    {
+      "title": "DPRD Kota Bogor Fasilitasi Solusi Relokasi Pedagang Tanaman Hias Jalan Semeru",
+      "snippet": "Wakil Ketua DPRD Kota Bogor Zenal Abidin akan memfasilitasi pertemuan untuk mencari solusi bagi 15 pedagang tanaman hias Jalan Semeru yang diminta mengosongkan lapak hingga akhir Agustus 2026.",
+      "url": "https://nasional.tempo.co/read/2119546/dprd-kota-bogor-fasilitasi-solusi-relokasi-pedagang-tanaman-hias-jalan-semeru",
+      "source": "Tempo Nasional",
+      "category": "institusi",
+      "pubDate": "Mon, 14 Sep 2026 18:54:16 +0700",
+      "heatScore": 55,
+      "sentiment": "waspada",
+      "pillarScores": {
+        "institusi": 62,
+        "ekonomi": 50,
+        "sosial": 50
+      }
+    },
+    {
+      "title": "DPRD Kota Bogor Ingatkan Rumah Sakit untuk Tidak Menolak Pasien Gawat Darurat",
+      "snippet": "Komisi IV DPRD Kota Bogor mengingatkan rumah sakit tidak menolak pasien gawat darurat dan memastikan prosedur rujukan berjalan sesuai ketentuan.",
+      "url": "https://nasional.tempo.co/read/2119545/dprd-kota-bogor-ingatkan-rumah-sakit-untuk-tidak-menolak-pasien-gawat-darurat",
+      "source": "Tempo Nasional",
+      "category": "institusi",
+      "pubDate": "Mon, 14 Sep 2026 18:53:01 +0700",
+      "heatScore": 55,
+      "sentiment": "waspada",
+      "pillarScores": {
+        "institusi": 62,
+        "ekonomi": 50,
+        "sosial": 50
+      }
+    },
+    {
+      "title": "DPRD Kota Bogor Dukung Rencana GMKB Gelar Bogor Bersholawat pada 21 November 2026",
+      "snippet": "DPRD Kota Bogor mendukung rencana GMKB menggelar Bogor Bersholawat pada 21 November 2026 yang akan melibatkan sekitar 200 majelis taklim se-Kota Bogor.",
+      "url": "https://nasional.tempo.co/read/2119544/dprd-kota-bogor-dukung-rencana-gmkb-gelar-bogor-bersholawat-pada-21-november-2026",
+      "source": "Tempo Nasional",
+      "category": "institusi",
+      "pubDate": "Mon, 14 Sep 2026 18:51:38 +0700",
+      "heatScore": 55,
+      "sentiment": "waspada",
+      "pillarScores": {
+        "institusi": 62,
+        "ekonomi": 50,
+        "sosial": 50
+      }
+    },
+    {
+      "title": "Hari Demokrasi Internasional 2026: Sejarah dan tujuannya",
+      "snippet": "Setiap 15 September, masyarakat dunia memperingati Hari Demokrasi Internasional sebagai momentum untuk kembali melihat ...",
+      "url": "https://www.antaranews.com/berita/5747309/hari-demokrasi-internasional-2026-sejarah-dan-tujuannya",
+      "source": "Antara News",
+      "category": "sosial",
+      "pubDate": "Fri, 18 Sep 2026 15:48:13 +0700",
+      "heatScore": 53,
+      "sentiment": "waspada",
+      "pillarScores": {
+        "institusi": 50,
+        "ekonomi": 50,
+        "sosial": 62
+      }
+    },
+    {
+      "title": "Menteri Transportasi Malaysia Mundur, Protes Pengampunan Najib Razak",
+      "snippet": "Menteri Transportasi Malaysia, Anthony Loke, mengundurkan diri sebagai protes atas pengampunan Najib Razak. DAP tetap dukung stabilitas pemerintahan.",
+      "url": "https://www.cnbcindonesia.com/news/20260920064444-4-769269/menteri-transportasi-malaysia-mundur-protes-pengampunan-najib-razak",
+      "source": "CNBC Indonesia",
+      "category": "sosial",
+      "pubDate": "Sun, 20 Sep 2026 07:20:40 +0700",
+      "heatScore": 53,
+      "sentiment": "waspada",
+      "pillarScores": {
+        "institusi": 50,
+        "ekonomi": 50,
+        "sosial": 62
+      }
+    }
+  ]
+}

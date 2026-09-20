@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metodologi & Formula — CabeIndex</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌶️</text></svg>">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .content-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .content-box h2 {
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      color: #f8fafc;
+    }
+    .content-box h2:first-child {
+      margin-top: 0;
+    }
+    .content-box p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+    .formula-card {
+      background: #0b0f14;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 14px;
+      padding: 1.5rem;
+      font-family: var(--font-mono);
+      color: #f87171;
+      font-size: 1rem;
+      margin: 1.5rem 0;
+      overflow-x: auto;
+    }
+    .table-container {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    th {
+      background: rgba(255, 255, 255, 0.04);
+      color: #f8fafc;
+    }
+    td {
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-wrapper">
+    <nav class="navbar">
+      <a href="index.html" class="brand">
+        <span class="brand-icon">🌶️</span>
+        <span class="brand-title">Cabe<span>Index</span></span>
+      </a>
+      <div class="nav-actions">
+        <a href="index.html" class="btn-secondary">← Kembali ke Dashboard</a>
+      </div>
+    </nav>
+
+    <div class="content-box">
+      <h2>🌶️ Filosofi & Metodologi CabeIndex</h2>
+      <p>
+        <strong>CabeIndex</strong> dirancang sebagai barometer independen yang mengukur suhu dinamika politik, ekonomi rakyat, dan sentimen kepercayaan publik di Indonesia secara otomatis. Alih-alih menyajikan angka statistik yang abstrak, CabeIndex memetakan realitas sosial ke dalam skala yang paling mudah dipahami seluruh masyarakat nusantara: <strong>Tingkat Kepedasan (Scoville Heat Scale)</strong>.
+      </p>
+
+      <h2>📐 Formula Perhitungan Indeks</h2>
+      <p>
+        Indeks nasional dihitung dari rata-rata tertimbang tiga pilar fundamental yang paling memengaruhi keseharian masyarakat:
+      </p>
+
+      <div class="formula-card">
+        Index = (0.40 × I_institusi) + (0.35 × I_ekonomi) + (0.25 × I_sosial)
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Pilar</th>
+              <th>Bobot</th>
+              <th>Fokus Pemantauan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Hukum & Institusi</strong></td>
+              <td>40%</td>
+              <td>Integritas penegakan hukum (KPK, Kejaksaan, Kepolisian), pembahasan RUU/DPR, vonis korupsi, dan transparansi kebijakan kementerian.</td>
+            </tr>
+            <tr>
+              <td><strong>2. Dapur & Ekonomi</strong></td>
+              <td>35%</td>
+              <td>Harga komoditas pangan pokok (beras, minyak, cabai), inflasi, tren PHK/lapangan kerja, daya beli rakyat, serta kebijakan pajak dan bansos.</td>
+            </tr>
+            <tr>
+              <td><strong>3. Tensi Sosial & Publik</strong></td>
+              <td>25%</td>
+              <td>Aksi demonstrasi damai, petisi publik, kebebasan berekspresi, serta dinamika percakapan sipil di ruang publik.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>🌶️ Tingkatan Kepedasan (0 – 100 Scoville)</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Skor</th>
+              <th>Level Kepedasan</th>
+              <th>Jenis Cabai</th>
+              <th>Kondisi Representatif</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0 – 20</td>
+              <td><span style="color:#10B981; font-weight:700;">Adem Ayem</span></td>
+              <td>Paprika Manis</td>
+              <td>Sentimen publik sangat tenang, stabilitas politik tinggi, optimisme ekonomi kuat.</td>
+            </tr>
+            <tr>
+              <td>21 – 45</td>
+              <td><span style="color:#F59E0B; font-weight:700;">Mulai Anget</span></td>
+              <td>Cabe Merah Keriting</td>
+              <td>Dinamika perdebatan kebijakan yang wajar, tensi dalam batas normal demokrasi.</td>
+            </tr>
+            <tr>
+              <td>46 – 70</td>
+              <td><span style="color:#EF4444; font-weight:700;">Pedas Nampol</span></td>
+              <td>Cabe Rawit Merah</td>
+              <td>Kritik publik terhadap institusi menguat, beban ekonomi dapur terasa menekan.</td>
+            </tr>
+            <tr>
+              <td>71 – 85</td>
+              <td><span style="color:#DC2626; font-weight:700;">Geprek Level 10</span></td>
+              <td>Ghost Pepper</td>
+              <td>Krisis kepercayaan meluas, skandal kebijakan signifikan, ketegangan sosial tinggi.</td>
+            </tr>
+            <tr>
+              <td>86 – 100</td>
+              <td><span style="color:#9333EA; font-weight:700;">Pedas Mampus</span></td>
+              <td>Carolina Reaper</td>
+              <td>Kondisi turbulensi ekstrem, demonstrasi masif, anjloknya tingkat kepercayaan publik.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>📰 Transparansi Sumber Berita & Netralitas</h2>
+      <p>
+        CabeIndex tidak memproduksi berita. Seluruh skor diagregasi secara objektif dari RSS Feed resmi kantor berita nasional dan media terverifikasi Dewan Pers (antara lain Antara News, Tempo, CNN Indonesia, Detikcom, dan CNBC Indonesia).
+      </p>
+      <p>
+        Setiap topik utama yang berkontribusi pada skor kepedasan selalu menyertakan tautan langsung ke artikel aslinya agar publik dapat memverifikasi konteks beritanya secara mandiri.
+      </p>
+    </div>
+
+    <footer class="footer">
+      <div>
+        <strong>CabeIndex.id</strong> — Transparansi Data untuk Publik.
+      </div>
+      <div class="footer-links">
+        <a href="index.html">← Kembali ke Dashboard</a>
+      </div>
+    </footer>
+  </div>
+
+</body>
+</html>
