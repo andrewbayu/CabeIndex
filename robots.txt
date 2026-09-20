@@ -1,0 +1,10 @@
+# robots.txt for CabeIndex (https://cabeindex.id)
+User-agent: *
+Allow: /
+Allow: /data/current.json
+Allow: /data/history.json
+
+# Disallow internal scripts
+Disallow: /scripts/
+
+Sitemap: https://cabeindex.id/sitemap.xml

@@ -1,0 +1,19 @@
+CABEINDEX — PERNYATAAN KETERBUKAAN & NETRALITAS DATA (DISCLAIMER)
+Terakhir diperbarui: 20 September 2026
+
+1. SIFAT INDEPENDEN & PUBLIK
+CabeIndex (cabeindex.id) adalah proyek data publik non-partisan yang bertujuan memetakan suhu percakapan sosial-politik, dinamika kebijakan publik, dan sentimen kepercayaan publik (public trust) di Indonesia ke dalam skala indeks kepedasan (Scoville Heat Scale 0 - 100).
+
+2. METODE AGREGASI BERITA (FAIR USE)
+Seluruh judul dan kutipan singkat berita yang ditampilkan bersumber secara otomatis dari sindikasi RSS Feed terbuka media arus utama terverifikasi Dewan Pers (termasuk Antara News, Tempo, CNN Indonesia, Detikcom, dan CNBC Indonesia). Seluruh hak cipta berita dan konten jurnalistik sepenuhnya milik masing-masing media penerbit.
+
+3. INDEKS OBJEKTIF & FORMULA TERBUKA
+Skor yang dihasilkan merupakan hasil komputasi berbasis leksikon dan algoritma pembobotan terbuka atas 3 pilar:
+- Pilar Hukum & Institusi (Bobot 40%)
+- Pilar Dapur & Ekonomi (Bobot 35%)
+- Pilar Tensi Sosial & Publik (Bobot 25%)
+
+CabeIndex tidak berafiliasi dengan partai politik, kementerian, lembaga survei komersial, maupun kelompok kepentingan mana pun.
+
+4. PENGGUNAAN INFORMASI
+Data yang disajikan dimaksudkan sebagai sarana edukasi literasi media, pemantauan sentimen publik, dan visualisasi data informatif. Pengguna disarankan tetap merujuk pada artikel berita sumber asli yang telah kami tautkan pada setiap entri topik.

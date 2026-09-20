@@ -1,0 +1,15 @@
+/* TEAM */
+Creator & Architect: Andrew Bayu
+Website: https://cabeindex.id
+Location: Indonesia
+
+/* THANKS & ATTRIBUTION */
+News Aggregation: Antara News, Tempo, CNN Indonesia, Detikcom, CNBC Indonesia
+Metaphor Inspiration: Scoville Heat Index (SHU) & Indonesian Culinary Culture
+Card Design Style: Binance & Bybit Crypto Trading PnL Card Aesthetics
+
+/* SITE */
+Standards: HTML5, CSS3, ES2026, SVG, Canvas API
+Dependencies: Zero (Pure Vanilla Web Stack)
+Hosting Ready: Netlify, Vercel, cPanel, GitHub Pages
+Access Model: 100% Public, Zero-Auth
