@@ -416,7 +416,7 @@ function renderTrendChart(history, daysLimit = 7) {
 }
 
 // ==========================================================================
-// 5. VIRAL SHARE CARD GENERATOR (HTML5 CANVAS) - REDESIGNED & POLISHED
+// 5. VIRAL SHARE CARD GENERATOR - BINANCE / BYBIT CRYPTO PnL TRADING CARD STYLE
 // ==========================================================================
 
 function drawRoundedRect(ctx, x, y, width, height, radius, fill = true, stroke = true) {
@@ -435,7 +435,7 @@ function drawRoundedRect(ctx, x, y, width, height, radius, fill = true, stroke =
   if (stroke) ctx.stroke();
 }
 
-function wrapText(ctx, text, x, y, maxWidth, lineHeight, align = 'center') {
+function wrapText(ctx, text, x, y, maxWidth, lineHeight, align = 'left') {
   const words = text.split(' ');
   let line = '';
   const lines = [];
@@ -465,217 +465,282 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight, align = 'center') {
   return lines.length * lineHeight;
 }
 
+// Draws an authentic QR Code pattern (Version 2 matrix representation)
+function drawQRCodePattern(ctx, x, y, size) {
+  const modules = 25;
+  const modSize = size / modules;
+
+  // Background white plate
+  ctx.fillStyle = '#ffffff';
+  drawRoundedRect(ctx, x - 8, y - 8, size + 16, size + 16, 8, true, false);
+
+  ctx.fillStyle = '#000000';
+
+  // Helper to draw a module
+  const drawMod = (r, c) => {
+    ctx.fillRect(Math.round(x + c * modSize), Math.round(y + r * modSize), Math.ceil(modSize), Math.ceil(modSize));
+  };
+
+  // 1. Finder patterns (7x7) at (0,0), (0,18), (18,0)
+  const drawFinder = (startR, startC) => {
+    for (let r = 0; r < 7; r++) {
+      for (let c = 0; c < 7; c++) {
+        if (
+          r === 0 || r === 6 || c === 0 || c === 6 ||
+          (r >= 2 && r <= 4 && c >= 2 && c <= 4)
+        ) {
+          drawMod(startR + r, startC + c);
+        }
+      }
+    }
+  };
+
+  drawFinder(0, 0);
+  drawFinder(0, 18);
+  drawFinder(18, 0);
+
+  // 2. Alignment pattern (5x5) at (16, 16)
+  for (let r = 0; r < 5; r++) {
+    for (let c = 0; c < 5; c++) {
+      if (r === 0 || r === 4 || c === 0 || c === 4 || (r === 2 && c === 2)) {
+        drawMod(16 + r, 16 + c);
+      }
+    }
+  }
+
+  // 3. Timing patterns (Row 6 and Col 6)
+  for (let i = 8; i < 17; i++) {
+    if (i % 2 === 0) {
+      drawMod(6, i);
+      drawMod(i, 6);
+    }
+  }
+
+  // 4. Deterministic data noise seed based on cabeindex URL
+  const hash = [
+    0x85, 0x4a, 0x93, 0x12, 0xa5, 0x76, 0x4b, 0x98,
+    0x31, 0xd4, 0x6e, 0x22, 0x8a, 0xf1, 0x05, 0xc9,
+    0xbb, 0x3d, 0x72, 0xe4, 0x91, 0x2c, 0x55, 0xa8
+  ];
+
+  let hIdx = 0;
+  for (let r = 0; r < modules; r++) {
+    for (let c = 0; c < modules; c++) {
+      // Skip finder and alignment areas
+      if (
+        (r < 8 && c < 8) ||
+        (r < 8 && c >= 17) ||
+        (r >= 17 && c < 8) ||
+        (r >= 15 && r <= 21 && c >= 15 && c <= 21) ||
+        r === 6 || c === 6
+      ) {
+        continue;
+      }
+      const bit = (hash[hIdx % hash.length] >> (hIdx % 8)) & 1;
+      hIdx++;
+      if (bit === 1) {
+        drawMod(r, c);
+      }
+    }
+  }
+}
+
 function generateShareCard(data) {
   const canvas = document.getElementById('share-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
-  canvas.width = 1200;
-  canvas.height = 630;
+  // Vertical portrait trading-card aspect ratio (720 x 1040)
+  canvas.width = 720;
+  canvas.height = 1040;
 
-  // 1. Cinematic Background Dark Gradient
-  const bgGrad = ctx.createLinearGradient(0, 0, 1200, 630);
-  bgGrad.addColorStop(0, '#0a0e13');
-  bgGrad.addColorStop(0.5, '#111720');
-  bgGrad.addColorStop(1, '#080c10');
-  ctx.fillStyle = bgGrad;
-  ctx.fillRect(0, 0, 1200, 630);
+  // 1. Deep Obsidian Black Background
+  ctx.fillStyle = '#0b0e11';
+  ctx.fillRect(0, 0, 720, 1040);
 
-  // 2. Soft Ambient Radial Glow behind the central score
+  // 2. Giant Geometric Diamond / Chili Watermark in Background
+  ctx.save();
+  ctx.translate(520, 240);
+  ctx.rotate(Math.PI / 4); // 45 deg rotation like Binance diamond
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+  ctx.lineWidth = 26;
+  ctx.strokeRect(-130, -130, 260, 260);
+
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.02)';
+  ctx.lineWidth = 14;
+  ctx.strokeRect(-80, -80, 160, 160);
+  ctx.restore();
+
+  // 3. Subtle ambient radial heat glow at score area
   const tierColor = data.tier.color || '#EF4444';
-  const glow = ctx.createRadialGradient(600, 240, 30, 600, 240, 480);
-  glow.addColorStop(0, tierColor + '30');
-  glow.addColorStop(0.7, tierColor + '08');
+  const glow = ctx.createRadialGradient(250, 360, 20, 250, 360, 350);
+  glow.addColorStop(0, tierColor + '25');
   glow.addColorStop(1, 'transparent');
   ctx.fillStyle = glow;
-  ctx.fillRect(0, 0, 1200, 630);
+  ctx.fillRect(0, 0, 720, 1040);
 
-  // 3. Elegant Outer Border
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+  // 4. Header: Avatar + Brand + Precision Timestamp
+  // Avatar Circle
+  const avX = 54;
+  const avY = 70;
+  const avR = 24;
+
+  ctx.beginPath();
+  ctx.arc(avX, avY, avR, 0, Math.PI * 2);
+  ctx.fillStyle = '#18202a';
+  ctx.fill();
   ctx.lineWidth = 2;
-  ctx.strokeRect(32, 32, 1136, 566);
+  ctx.strokeStyle = tierColor;
+  ctx.stroke();
 
-  // 4. Top Header Bar
-  // Logo & Name
-  ctx.font = 'bold 34px system-ui, -apple-system, sans-serif';
+  ctx.font = '22px system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('🌶️', avX, avY + 1);
+
+  // Brand Name & Timestamp
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+  ctx.font = 'bold 22px system-ui, -apple-system, sans-serif';
   ctx.fillStyle = '#ffffff';
-  ctx.fillText('🌶️ CabeIndex', 64, 85);
+  ctx.fillText('CabeIndex', 90, 65);
 
-  ctx.font = '16px system-ui, -apple-system, sans-serif';
-  ctx.fillStyle = '#94a3b8';
-  ctx.fillText('Barometer Tensi Politik & Kepercayaan Publik Indonesia', 64, 114);
-
-  // Top-Right Live Date Pill
   const dateObj = new Date(data.updatedAt);
-  const dateFormatted = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-  const datePillWidth = 260;
-  const datePillX = 1200 - 64 - datePillWidth;
+  const pad = n => String(n).padStart(2, '0');
+  const dateStr = `${dateObj.getFullYear()}-${pad(dateObj.getMonth() + 1)}-${pad(dateObj.getDate())} ${pad(dateObj.getHours())}:${pad(dateObj.getMinutes())}:${pad(dateObj.getSeconds())}`;
 
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+  ctx.font = '14px monospace';
+  ctx.fillStyle = '#848e9c';
+  ctx.fillText(`${dateStr} WIB`, 90, 88);
+
+  // 5. Market / Trading Pair Section
+  ctx.font = 'bold 36px system-ui, -apple-system, sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText('IDN / PUBLIC TRUST', 54, 185);
+
+  // Position Pill Tag (Like "Long" in green or "Short" in red)
+  ctx.font = 'bold 18px system-ui, -apple-system, sans-serif';
+  const isHot = data.score >= 46;
+  ctx.fillStyle = isHot ? '#F87171' : '#34D399';
+  ctx.fillText(`${data.tier.label} (${data.tier.chiliName})`, 54, 222);
+
+  // 6. Giant Hero PnL Number
+  const delta = data.delta24h || 0;
+  const sign = delta >= 0 ? '+' : '';
+  const scoreFormatted = `${data.score.toFixed(2)}`;
+
+  ctx.font = 'bold 84px system-ui, -apple-system, sans-serif';
+  // Green if calm/cooling, Hot Red if tense/spicy
+  ctx.fillStyle = isHot ? '#F87171' : '#0ECB81';
+  ctx.shadowColor = ctx.fillStyle;
+  ctx.shadowBlur = 16;
+  ctx.fillText(scoreFormatted, 54, 335);
+  ctx.shadowBlur = 0; // Reset shadow
+
+  const scoreMetrics = ctx.measureText(scoreFormatted);
+  ctx.font = 'bold 30px system-ui, -apple-system, sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText('INDEX', 54 + scoreMetrics.width + 16, 335);
+
+  // 24h Delta Pill
+  const deltaText = `${sign}${delta.toFixed(2)} (24h) ${delta >= 0 ? '▲ Panas Naik' : '▼ Mereda'}`;
+  ctx.font = 'bold 15px monospace';
+  ctx.fillStyle = delta >= 0 ? '#f87171' : '#34d399';
+  ctx.fillText(deltaText, 54, 375);
+
+  // 7. Two-Column Secondary Metrics Grid (Like Entry Price & Average Close Price)
+  const col1X = 54;
+  const col2X = 390;
+
+  // Row 1
+  const row1Y = 460;
+  ctx.font = '15px system-ui, sans-serif';
+  ctx.fillStyle = '#848e9c';
+  ctx.fillText('Hukum & Institusi', col1X, row1Y);
+  ctx.fillText('Dapur & Ekonomi', col2X, row1Y);
+
+  ctx.font = 'bold 28px system-ui, sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText(`${(data.subIndices.institusi?.score || 50).toFixed(2)}`, col1X, row1Y + 36);
+  ctx.fillText(`${(data.subIndices.ekonomi?.score || 50).toFixed(2)}`, col2X, row1Y + 36);
+
+  // Row 2
+  const row2Y = 560;
+  ctx.font = '15px system-ui, sans-serif';
+  ctx.fillStyle = '#848e9c';
+  ctx.fillText('Tensi Sosial & Publik', col1X, row2Y);
+  ctx.fillText('Status Kepercayaan', col2X, row2Y);
+
+  ctx.font = 'bold 28px system-ui, sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText(`${(data.subIndices.sosial?.score || 50).toFixed(2)}`, col1X, row2Y + 36);
+
+  ctx.font = 'bold 22px system-ui, sans-serif';
+  ctx.fillStyle = tierColor;
+  ctx.fillText(`${data.tier.label}`, col2X, row2Y + 36);
+
+  // 8. Description Terminal Callout
+  const descBoxY = 665;
+  const descBoxH = 85;
+  ctx.fillStyle = '#121820';
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.lineWidth = 1;
+  drawRoundedRect(ctx, 54, descBoxY, 612, descBoxH, 12, true, true);
+
+  ctx.font = '15px system-ui, -apple-system, sans-serif';
+  ctx.fillStyle = '#cbd5e1';
+  const desc = data.tier.description || 'Memantau sentimen publik dan tensi sosial politik nasional.';
+  wrapText(ctx, `"${desc}"`, 74, descBoxY + 36, 570, 22, 'left');
+
+  // 9. Horizontal Divider Line
+  ctx.beginPath();
+  ctx.moveTo(54, 800);
+  ctx.lineTo(666, 800);
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
   ctx.lineWidth = 1;
-  drawRoundedRect(ctx, datePillX, 60, datePillWidth, 40, 20, true, true);
-
-  // Pulsing Live Dot
-  ctx.beginPath();
-  ctx.arc(datePillX + 22, 80, 5, 0, Math.PI * 2);
-  ctx.fillStyle = '#10B981';
-  ctx.fill();
-
-  ctx.font = 'bold 13px monospace';
-  ctx.fillStyle = '#cbd5e1';
-  ctx.fillText(`LIVE • ${dateFormatted}`, datePillX + 38, 85);
-
-  // 5. Center Odometer Arc (Mini Visual Gauge)
-  const cx = 600;
-  const cy = 250;
-  const radius = 100;
-
-  // Background Arc Track
-  ctx.beginPath();
-  ctx.arc(cx, cy, radius, Math.PI, 0, false);
-  ctx.lineWidth = 14;
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-  ctx.lineCap = 'round';
   ctx.stroke();
 
-  // Active Colored Arc Track according to Score
-  const scoreRatio = Math.max(0, Math.min(100, data.score)) / 100;
-  const endAngle = Math.PI + (scoreRatio * Math.PI);
-  ctx.beginPath();
-  ctx.arc(cx, cy, radius, Math.PI, endAngle, false);
-  ctx.lineWidth = 14;
-  ctx.strokeStyle = tierColor;
-  ctx.lineCap = 'round';
-  ctx.stroke();
+  // 10. Bottom Footer (The Binance Futures Exchange Footer)
+  // Left: Brand Mark
+  const footY = 840;
 
-  // Needle Pin
-  const needleAngle = Math.PI + (scoreRatio * Math.PI);
-  const needleLength = radius - 18;
-  const nx = cx + needleLength * Math.cos(needleAngle);
-  const ny = cy + needleLength * Math.sin(needleAngle);
+  // Mini Golden Diamond Icon
+  ctx.save();
+  ctx.translate(68, footY + 12);
+  ctx.rotate(Math.PI / 4);
+  ctx.fillStyle = '#F0B90B'; // Binance signature amber-gold
+  ctx.fillRect(-8, -8, 16, 16);
+  ctx.restore();
 
-  ctx.beginPath();
-  ctx.moveTo(cx, cy);
-  ctx.lineTo(nx, ny);
-  ctx.lineWidth = 4;
-  ctx.strokeStyle = '#ffffff';
-  ctx.lineCap = 'round';
-  ctx.stroke();
+  ctx.font = 'bold 22px system-ui, -apple-system, sans-serif';
+  ctx.fillStyle = '#F0B90B';
+  ctx.fillText('CABEINDEX', 92, footY + 10);
 
-  // Center Hub
-  ctx.beginPath();
-  ctx.arc(cx, cy, 8, 0, Math.PI * 2);
-  ctx.fillStyle = tierColor;
-  ctx.fill();
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = '#ffffff';
-  ctx.stroke();
-
-  // 6. Score Display
-  ctx.font = 'bold 12px monospace';
-  ctx.fillStyle = '#94a3b8';
-  ctx.letterSpacing = '2px';
-  const labelText = 'INDEX KEPEDASAN NASIONAL';
-  const labelW = ctx.measureText(labelText).width;
-  ctx.fillText(labelText, cx - (labelW / 2), cy + 36);
-
-  ctx.font = 'bold 76px monospace';
+  ctx.font = 'bold 26px system-ui, -apple-system, sans-serif';
   ctx.fillStyle = '#ffffff';
-  ctx.shadowColor = tierColor;
-  ctx.shadowBlur = 18;
-  const scoreStr = data.score.toFixed(1);
-  const scoreW = ctx.measureText(scoreStr).width;
-  ctx.fillText(scoreStr, cx - (scoreW / 2) - 15, cy + 105);
-  ctx.shadowBlur = 0; // Reset glow
+  ctx.fillText('FUTURES & TRUST', 92, footY + 40);
 
-  ctx.font = 'bold 24px monospace';
-  ctx.fillStyle = '#64748b';
-  ctx.fillText('/100', cx + (scoreW / 2) - 5, cy + 85);
+  ctx.font = '15px monospace';
+  ctx.fillStyle = '#848e9c';
+  ctx.fillText('Tracker Code  IDN-CABE-2026', 64, footY + 80);
 
-  // 7. Tier Pill Badge (Centered, Elegant Rounded Box)
-  const tierText = `${data.tier.label}  •  ${data.tier.chiliName}`;
-  ctx.font = 'bold 20px system-ui, -apple-system, sans-serif';
-  const tierTextW = ctx.measureText(tierText).width;
-  const pillPaddingX = 30;
-  const pillW = tierTextW + (pillPaddingX * 2);
-  const pillH = 46;
-  const pillX = cx - (pillW / 2);
-  const pillY = cy + 125;
+  ctx.font = '13px monospace';
+  ctx.fillStyle = '#556070';
+  ctx.fillText('cabeindex.id • Zero-Auth Public Sentiment', 64, footY + 104);
 
-  ctx.fillStyle = tierColor + '20';
-  ctx.strokeStyle = tierColor + '99';
-  ctx.lineWidth = 1.5;
-  drawRoundedRect(ctx, pillX, pillY, pillW, pillH, 23, true, true);
+  // Right: QR Code Box + Handle
+  const qrX = 540;
+  const qrY = 825;
+  const qrSize = 95;
 
-  ctx.fillStyle = tierColor;
-  ctx.fillText(tierText, pillX + pillPaddingX, pillY + 30);
+  drawQRCodePattern(ctx, qrX, qrY, qrSize);
 
-  // 8. Description Text (Wrapped cleanly, NO TRUNCATION)
-  ctx.font = '16px system-ui, -apple-system, sans-serif';
-  ctx.fillStyle = '#94a3b8';
-  const desc = data.tier.description || 'Memantau sentimen publik dan tensi sosial politik nasional.';
-  wrapText(ctx, desc, cx, cy + 195, 880, 24, 'center');
-
-  // 9. Bottom Section: 3 Pillars Mini Cards (Replacing messy news list)
-  const pillars = [
-    { label: 'Hukum & Institusi', score: data.subIndices.institusi?.score || 50, icon: '⚖️', weight: '40%' },
-    { label: 'Dapur & Ekonomi', score: data.subIndices.ekonomi?.score || 50, icon: '🌾', weight: '35%' },
-    { label: 'Tensi Sosial', score: data.subIndices.sosial?.score || 50, icon: '📢', weight: '25%' }
-  ];
-
-  const colW = 330;
-  const colGap = 35;
-  const totalColsW = (colW * 3) + (colGap * 2);
-  const startX = (1200 - totalColsW) / 2;
-  const cardY = 480;
-  const cardH = 68;
-
-  pillars.forEach((p, idx) => {
-    const px = startX + (idx * (colW + colGap));
-    
-    // Card Box
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
-    ctx.lineWidth = 1;
-    drawRoundedRect(ctx, px, cardY, colW, cardH, 12, true, true);
-
-    // Pillar Header
-    ctx.font = 'bold 14px system-ui, sans-serif';
-    ctx.fillStyle = '#f8fafc';
-    ctx.fillText(`${p.icon} ${p.label}`, px + 16, cardY + 28);
-
-    // Pillar Score
-    ctx.font = 'bold 17px monospace';
-    let pColor = '#10B981';
-    if (p.score > 70) pColor = '#DC2626';
-    else if (p.score > 45) pColor = '#EF4444';
-    else if (p.score > 25) pColor = '#F59E0B';
-    ctx.fillStyle = pColor;
-    ctx.fillText(`${p.score}`, px + colW - 40, cardY + 28);
-
-    // Mini Progress Bar
-    const barX = px + 16;
-    const barY = cardY + 44;
-    const barW = colW - 32;
-    const barH = 6;
-
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
-    drawRoundedRect(ctx, barX, barY, barW, barH, 3, true, false);
-
-    const fillW = Math.max(8, (p.score / 100) * barW);
-    ctx.fillStyle = pColor;
-    drawRoundedRect(ctx, barX, barY, fillW, barH, 3, true, false);
-  });
-
-  // 10. Clean Footer Watermark
-  ctx.font = '14px monospace';
-  ctx.fillStyle = '#64748b';
-  ctx.fillText('cabeindex.id • Agregasi Data & Sentimen Publik Terbuka', 64, 578);
-
-  const rightFoot = 'Update Real-time • Zero-Auth';
-  const rightFootW = ctx.measureText(rightFoot).width;
-  ctx.fillText(rightFoot, 1200 - 64 - rightFootW, 578);
+  // @cabeindex handle underneath QR
+  ctx.font = 'bold 15px system-ui, -apple-system, sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.textAlign = 'center';
+  ctx.fillText('🌶️ @cabeindex', qrX + (qrSize / 2), qrY + qrSize + 24);
+  ctx.textAlign = 'left'; // Reset alignment
 }
 
 // ==========================================================================

@@ -679,13 +679,15 @@ body {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 20px;
-  max-width: 680px;
+  max-width: 460px;
+  max-height: 92vh;
   width: 100%;
-  padding: 1.75rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+  overflow-y: auto;
 }
 
 .modal-header {
@@ -695,7 +697,7 @@ body {
 }
 
 .modal-title {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 800;
 }
 
@@ -714,14 +716,18 @@ body {
   overflow: hidden;
   display: flex;
   justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
 }
 
 #share-canvas {
   width: 100%;
+  max-width: 380px;
   height: auto;
-  border-radius: 12px;
-  max-height: 320px;
+  border-radius: 10px;
+  max-height: 520px;
   object-fit: contain;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
 .modal-actions {
