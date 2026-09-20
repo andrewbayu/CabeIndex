@@ -416,8 +416,55 @@ function renderTrendChart(history, daysLimit = 7) {
 }
 
 // ==========================================================================
-// 5. VIRAL SHARE CARD GENERATOR (HTML5 CANVAS)
+// 5. VIRAL SHARE CARD GENERATOR (HTML5 CANVAS) - REDESIGNED & POLISHED
 // ==========================================================================
+
+function drawRoundedRect(ctx, x, y, width, height, radius, fill = true, stroke = true) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+  if (fill) ctx.fill();
+  if (stroke) ctx.stroke();
+}
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight, align = 'center') {
+  const words = text.split(' ');
+  let line = '';
+  const lines = [];
+
+  for (let n = 0; n < words.length; n++) {
+    const testLine = line + words[n] + ' ';
+    const metrics = ctx.measureText(testLine);
+    const testWidth = metrics.width;
+    if (testWidth > maxWidth && n > 0) {
+      lines.push(line.trim());
+      line = words[n] + ' ';
+    } else {
+      line = testLine;
+    }
+  }
+  lines.push(line.trim());
+
+  lines.forEach((l, index) => {
+    let drawX = x;
+    if (align === 'center') {
+      const lineWidth = ctx.measureText(l).width;
+      drawX = x - (lineWidth / 2);
+    }
+    ctx.fillText(l, drawX, y + (index * lineHeight));
+  });
+
+  return lines.length * lineHeight;
+}
+
 function generateShareCard(data) {
   const canvas = document.getElementById('share-canvas');
   if (!canvas) return;
@@ -426,97 +473,209 @@ function generateShareCard(data) {
   canvas.width = 1200;
   canvas.height = 630;
 
-  // Background Dark Gradient
+  // 1. Cinematic Background Dark Gradient
   const bgGrad = ctx.createLinearGradient(0, 0, 1200, 630);
-  bgGrad.addColorStop(0, '#0b0f14');
-  bgGrad.addColorStop(1, '#18202b');
+  bgGrad.addColorStop(0, '#0a0e13');
+  bgGrad.addColorStop(0.5, '#111720');
+  bgGrad.addColorStop(1, '#080c10');
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, 1200, 630);
 
-  // Fiery Radial Glow on Top-Right
-  const glow = ctx.createRadialGradient(1000, 100, 10, 1000, 100, 500);
-  glow.addColorStop(0, data.tier.color + '44');
+  // 2. Soft Ambient Radial Glow behind the central score
+  const tierColor = data.tier.color || '#EF4444';
+  const glow = ctx.createRadialGradient(600, 240, 30, 600, 240, 480);
+  glow.addColorStop(0, tierColor + '30');
+  glow.addColorStop(0.7, tierColor + '08');
   glow.addColorStop(1, 'transparent');
   ctx.fillStyle = glow;
   ctx.fillRect(0, 0, 1200, 630);
 
-  // Border frame
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-  ctx.lineWidth = 4;
-  ctx.strokeRect(30, 30, 1140, 570);
+  // 3. Elegant Outer Border
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(32, 32, 1136, 566);
 
-  // Brand Header
-  ctx.font = 'bold 38px system-ui, sans-serif';
+  // 4. Top Header Bar
+  // Logo & Name
+  ctx.font = 'bold 34px system-ui, -apple-system, sans-serif';
   ctx.fillStyle = '#ffffff';
-  ctx.fillText('🌶️ CabeIndex', 70, 95);
+  ctx.fillText('🌶️ CabeIndex', 64, 85);
 
-  ctx.font = '20px system-ui, sans-serif';
+  ctx.font = '16px system-ui, -apple-system, sans-serif';
   ctx.fillStyle = '#94a3b8';
-  ctx.fillText('Barometer Tensi Politik & Kepercayaan Publik Indonesia', 70, 130);
+  ctx.fillText('Barometer Tensi Politik & Kepercayaan Publik Indonesia', 64, 114);
 
-  // Left Block: Odometer Score Box
-  ctx.fillStyle = '#121820';
-  ctx.fillRect(70, 170, 420, 380);
-  ctx.strokeStyle = data.tier.color + '66';
-  ctx.strokeRect(70, 170, 420, 380);
+  // Top-Right Live Date Pill
+  const dateObj = new Date(data.updatedAt);
+  const dateFormatted = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+  const datePillWidth = 260;
+  const datePillX = 1200 - 64 - datePillWidth;
 
-  ctx.font = '16px system-ui, sans-serif';
-  ctx.fillStyle = '#94a3b8';
-  ctx.fillText('INDEX KEPEDASAN NASIONAL', 100, 215);
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+  ctx.lineWidth = 1;
+  drawRoundedRect(ctx, datePillX, 60, datePillWidth, 40, 20, true, true);
 
-  ctx.font = 'bold 110px monospace';
-  ctx.fillStyle = '#ffffff';
-  ctx.fillText(data.score.toFixed(1), 100, 325);
+  // Pulsing Live Dot
+  ctx.beginPath();
+  ctx.arc(datePillX + 22, 80, 5, 0, Math.PI * 2);
+  ctx.fillStyle = '#10B981';
+  ctx.fill();
 
-  ctx.font = 'bold 30px monospace';
-  ctx.fillStyle = '#64748b';
-  ctx.fillText('/100', 370, 325);
-
-  // Tier Badge Box
-  ctx.fillStyle = data.tier.color + '25';
-  ctx.fillRect(100, 360, 350, 60);
-  ctx.strokeStyle = data.tier.color;
-  ctx.strokeRect(100, 360, 350, 60);
-
-  ctx.font = 'bold 24px system-ui, sans-serif';
-  ctx.fillStyle = data.tier.color;
-  ctx.fillText(`${data.tier.label}`, 120, 398);
-
-  ctx.font = '18px system-ui, sans-serif';
+  ctx.font = 'bold 13px monospace';
   ctx.fillStyle = '#cbd5e1';
-  ctx.fillText(`• ${data.tier.chiliName}`, 310, 398);
+  ctx.fillText(`LIVE • ${dateFormatted}`, datePillX + 38, 85);
 
-  ctx.font = '15px system-ui, sans-serif';
+  // 5. Center Odometer Arc (Mini Visual Gauge)
+  const cx = 600;
+  const cy = 250;
+  const radius = 100;
+
+  // Background Arc Track
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, Math.PI, 0, false);
+  ctx.lineWidth = 14;
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.lineCap = 'round';
+  ctx.stroke();
+
+  // Active Colored Arc Track according to Score
+  const scoreRatio = Math.max(0, Math.min(100, data.score)) / 100;
+  const endAngle = Math.PI + (scoreRatio * Math.PI);
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, Math.PI, endAngle, false);
+  ctx.lineWidth = 14;
+  ctx.strokeStyle = tierColor;
+  ctx.lineCap = 'round';
+  ctx.stroke();
+
+  // Needle Pin
+  const needleAngle = Math.PI + (scoreRatio * Math.PI);
+  const needleLength = radius - 18;
+  const nx = cx + needleLength * Math.cos(needleAngle);
+  const ny = cy + needleLength * Math.sin(needleAngle);
+
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(nx, ny);
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineCap = 'round';
+  ctx.stroke();
+
+  // Center Hub
+  ctx.beginPath();
+  ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+  ctx.fillStyle = tierColor;
+  ctx.fill();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#ffffff';
+  ctx.stroke();
+
+  // 6. Score Display
+  ctx.font = 'bold 12px monospace';
   ctx.fillStyle = '#94a3b8';
-  const desc = data.tier.description.length > 45 ? data.tier.description.slice(0, 42) + '...' : data.tier.description;
-  ctx.fillText(desc, 100, 460);
+  ctx.letterSpacing = '2px';
+  const labelText = 'INDEX KEPEDASAN NASIONAL';
+  const labelW = ctx.measureText(labelText).width;
+  ctx.fillText(labelText, cx - (labelW / 2), cy + 36);
 
-  // Right Block: Top News Drivers
-  ctx.font = 'bold 22px system-ui, sans-serif';
+  ctx.font = 'bold 76px monospace';
   ctx.fillStyle = '#ffffff';
-  ctx.fillText('🔥 Pemicu Utama Hari Ini:', 530, 210);
+  ctx.shadowColor = tierColor;
+  ctx.shadowBlur = 18;
+  const scoreStr = data.score.toFixed(1);
+  const scoreW = ctx.measureText(scoreStr).width;
+  ctx.fillText(scoreStr, cx - (scoreW / 2) - 15, cy + 105);
+  ctx.shadowBlur = 0; // Reset glow
 
-  const drivers = data.topDrivers.slice(0, 3);
-  drivers.forEach((drv, i) => {
-    const y = 250 + (i * 95);
-    ctx.fillStyle = '#1a222c';
-    ctx.fillRect(530, y, 600, 80);
+  ctx.font = 'bold 24px monospace';
+  ctx.fillStyle = '#64748b';
+  ctx.fillText('/100', cx + (scoreW / 2) - 5, cy + 85);
 
-    ctx.font = 'bold 13px system-ui, sans-serif';
-    ctx.fillStyle = drv.sentiment === 'kritis' ? '#f87171' : '#fbbf24';
-    ctx.fillText(`[${drv.source.toUpperCase()}] ${drv.sentiment.toUpperCase()}`, 550, y + 26);
+  // 7. Tier Pill Badge (Centered, Elegant Rounded Box)
+  const tierText = `${data.tier.label}  •  ${data.tier.chiliName}`;
+  ctx.font = 'bold 20px system-ui, -apple-system, sans-serif';
+  const tierTextW = ctx.measureText(tierText).width;
+  const pillPaddingX = 30;
+  const pillW = tierTextW + (pillPaddingX * 2);
+  const pillH = 46;
+  const pillX = cx - (pillW / 2);
+  const pillY = cy + 125;
 
-    ctx.font = '16px system-ui, sans-serif';
+  ctx.fillStyle = tierColor + '20';
+  ctx.strokeStyle = tierColor + '99';
+  ctx.lineWidth = 1.5;
+  drawRoundedRect(ctx, pillX, pillY, pillW, pillH, 23, true, true);
+
+  ctx.fillStyle = tierColor;
+  ctx.fillText(tierText, pillX + pillPaddingX, pillY + 30);
+
+  // 8. Description Text (Wrapped cleanly, NO TRUNCATION)
+  ctx.font = '16px system-ui, -apple-system, sans-serif';
+  ctx.fillStyle = '#94a3b8';
+  const desc = data.tier.description || 'Memantau sentimen publik dan tensi sosial politik nasional.';
+  wrapText(ctx, desc, cx, cy + 195, 880, 24, 'center');
+
+  // 9. Bottom Section: 3 Pillars Mini Cards (Replacing messy news list)
+  const pillars = [
+    { label: 'Hukum & Institusi', score: data.subIndices.institusi?.score || 50, icon: '⚖️', weight: '40%' },
+    { label: 'Dapur & Ekonomi', score: data.subIndices.ekonomi?.score || 50, icon: '🌾', weight: '35%' },
+    { label: 'Tensi Sosial', score: data.subIndices.sosial?.score || 50, icon: '📢', weight: '25%' }
+  ];
+
+  const colW = 330;
+  const colGap = 35;
+  const totalColsW = (colW * 3) + (colGap * 2);
+  const startX = (1200 - totalColsW) / 2;
+  const cardY = 480;
+  const cardH = 68;
+
+  pillars.forEach((p, idx) => {
+    const px = startX + (idx * (colW + colGap));
+    
+    // Card Box
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
+    ctx.lineWidth = 1;
+    drawRoundedRect(ctx, px, cardY, colW, cardH, 12, true, true);
+
+    // Pillar Header
+    ctx.font = 'bold 14px system-ui, sans-serif';
     ctx.fillStyle = '#f8fafc';
-    const title = drv.title.length > 55 ? drv.title.slice(0, 52) + '...' : drv.title;
-    ctx.fillText(title, 550, y + 55);
+    ctx.fillText(`${p.icon} ${p.label}`, px + 16, cardY + 28);
+
+    // Pillar Score
+    ctx.font = 'bold 17px monospace';
+    let pColor = '#10B981';
+    if (p.score > 70) pColor = '#DC2626';
+    else if (p.score > 45) pColor = '#EF4444';
+    else if (p.score > 25) pColor = '#F59E0B';
+    ctx.fillStyle = pColor;
+    ctx.fillText(`${p.score}`, px + colW - 40, cardY + 28);
+
+    // Mini Progress Bar
+    const barX = px + 16;
+    const barY = cardY + 44;
+    const barW = colW - 32;
+    const barH = 6;
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+    drawRoundedRect(ctx, barX, barY, barW, barH, 3, true, false);
+
+    const fillW = Math.max(8, (p.score / 100) * barW);
+    ctx.fillStyle = pColor;
+    drawRoundedRect(ctx, barX, barY, fillW, barH, 3, true, false);
   });
 
-  // Footer inside card
-  ctx.font = '16px monospace';
+  // 10. Clean Footer Watermark
+  ctx.font = '14px monospace';
   ctx.fillStyle = '#64748b';
-  const dateStr = new Date(data.updatedAt).toLocaleDateString('id-ID', { dateStyle: 'full' });
-  ctx.fillText(`Update: ${dateStr} • cabeindex.id`, 530, 575);
+  ctx.fillText('cabeindex.id • Agregasi Data & Sentimen Publik Terbuka', 64, 578);
+
+  const rightFoot = 'Update Real-time • Zero-Auth';
+  const rightFootW = ctx.measureText(rightFoot).width;
+  ctx.fillText(rightFoot, 1200 - 64 - rightFootW, 578);
 }
 
 // ==========================================================================
